@@ -15,4 +15,15 @@ const boardSchema = new mongoose.Schema(
 
 const Board = mongoose.model('Boards', boardSchema, 'boards');
 
+export const seedBoards = async () => {
+	const board = new Board({
+		boardName: 'board1'
+	})
+
+	try {
+		await board.save();
+	} catch (error) {
+		console.log(error);
+	}
+}
 export default Board;

@@ -2,7 +2,7 @@ import User from "../models/user/user";
 
 export const findByLogin = async (name: string) => {
 	let user =  await User.findOne({
-		username: name
+		userName: name
 	});
 	if (!user) {
 		user = null;

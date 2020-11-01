@@ -1,6 +1,7 @@
 declare namespace Express {
 	export interface Request {
-		user: User
+		user: User,
+		boardName: string
 	}
 }
 
@@ -9,4 +10,4 @@ interface User {
 	password: string
 }
 
-declare module "express-user";
+declare module "express-custom";
