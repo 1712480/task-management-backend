@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 
-import User from "./user/user";
-import Boards from "./board/board";
+import User from './user/user';
+import Boards from './board/board';
+import Column from './column/column';
+import Ticket from './ticket/ticket';
 
 const connectDb = () => mongoose.connect(process.env.MONGODB_URL as string);
 
-const closeConnection = () => mongoose.disconnect()
+const models = { User, Boards, Column, Ticket };
 
-const models = { User, Boards };
-
-export { connectDb, closeConnection };
+export { connectDb };
 
 export default models;

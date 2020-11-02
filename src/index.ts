@@ -5,6 +5,8 @@ import express from 'express';
 import models, { connectDb } from "./models";
 import { seedUser } from './models/user/user';
 import { seedBoards } from "./models/board/board";
+import { seedColumns } from "./models/column/column";
+import { seedTicket } from "./models/ticket/ticket";
 import { findByLogin } from './controllers/user';
 
 import userRoute from './routes/user';
@@ -34,14 +36,18 @@ const port = process.env.PORT;
 try {
 	connectDb().then(async () => {
 		// Delete all current data.
-		await Promise.all([
-			models.User.deleteMany({}),
-			models.Boards.deleteMany({})
-		]);
+		// await Promise.all([
+		// 	models.User.deleteMany({}),
+		// 	models.Boards.deleteMany({}),
+		// 	models.Column.deleteMany({}),
+		// 	models.Ticket.deleteMany({})
+		// ]);
 
 		// Seed data.
-		await seedUser();
-		await seedBoards();
+		// await seedUser();
+		// await seedBoards();
+		// await seedColumns();
+		// await seedTicket();
 		app.listen(port, () => {
 			console.log(`Back-end listening on port ${port}`);
 		});
