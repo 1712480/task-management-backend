@@ -7,7 +7,6 @@ import { seedUser } from './models/user/user';
 import { seedBoards } from "./models/board/board";
 import { seedColumns } from "./models/column/column";
 import { seedTicket } from "./models/ticket/ticket";
-import { findByLogin } from './controllers/user';
 
 import userRoute from './routes/user';
 import boardRoute from "./routes/board";
@@ -15,16 +14,10 @@ const app = express();
 
 app.use(cors());
 
-app.use((req, res, next) => {
-	next();
-});
-
 app.get('/', async (req, res) => {
-	const user: any = await findByLogin('admin1');
-	if (user === null) {
-		res.send('null')
-	}
-	res.send(user);
+	res.status(200).send({
+		message: 'Hello from back-end.'
+	});
 });
 
 app.use('/user', userRoute);
@@ -35,15 +28,15 @@ const port = process.env.PORT;
 // Connect to database
 try {
 	connectDb().then(async () => {
-		// Delete all current data.
+		// // Delete all current data.
 		// await Promise.all([
 		// 	models.User.deleteMany({}),
 		// 	models.Boards.deleteMany({}),
 		// 	models.Column.deleteMany({}),
 		// 	models.Ticket.deleteMany({})
 		// ]);
-
-		// Seed data.
+		//
+		// // Seed data.
 		// await seedUser();
 		// await seedBoards();
 		// await seedColumns();

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Column from '../column/column';
 
+import { ITicketDocument } from './ticket.d';
 const ticketSchema = new mongoose.Schema(
     {
         ticketName: {
@@ -21,7 +22,7 @@ const ticketSchema = new mongoose.Schema(
     }
 );
 
-const Ticket = mongoose.model('Ticket', ticketSchema, 'tickets');
+const Ticket = mongoose.model<ITicketDocument>('Ticket', ticketSchema, 'tickets');
 
 export const seedTicket = async () => {
     const wentWell = await Column.findOne({ columnName: 'wentWell' });
@@ -45,10 +46,14 @@ export const seedTicket = async () => {
     ];
 
     try {
+        let ticketsArray: ITicketDocument[] = [];
         ticketsData.map(async ticket => {
             const newTicket = new Ticket(ticket);
+            ticketsArray.push(newTicket);
             await newTicket.save();
-        })
+        });
+        ticketsArray.map((ticket: ITicketDocument) => wentWell!.tickets.push(ticket));
+        await wentWell!.save();
     } catch (error) {
         console.log(error);
     }

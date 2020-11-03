@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import Board from '../board/board';
 
+import { IColumnDocument } from './column.d';
+
 const columnSchema = new mongoose.Schema(
     {
         columnName: {
@@ -21,7 +23,7 @@ const columnSchema = new mongoose.Schema(
     }
 );
 
-const Column = mongoose.model('Column', columnSchema, 'columns');
+const Column = mongoose.model<IColumnDocument>('Column', columnSchema, 'columns');
 
 export const seedColumns = async () => {
     const board1 = await Board.findOne({ boardName: 'board1' });
@@ -42,9 +44,13 @@ export const seedColumns = async () => {
     ];
 
     try {
-        const newColumn = new Column(columnsData[0]);
-        await newColumn.save();
-        board1!.columns.push(newColumn);
+        let columnsArray: IColumnDocument[] = [];
+        columnsData.map(async column => {
+            const newColumn = new Column(column);
+            columnsArray.push(newColumn);
+            await newColumn.save();
+        })
+        columnsArray.map((column: IColumnDocument) => board1!.columns.push(column));
         await board1!.save();
     } catch (error) {
         console.log(error);
