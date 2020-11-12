@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { IBoardDocument } from './board.d';
+
 const boardSchema = new mongoose.Schema(
 	{
 		boardName: {
@@ -7,13 +9,19 @@ const boardSchema = new mongoose.Schema(
 			unique: true,
 			required: true
 		},
+		columns: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Column'
+			}
+		]
 	},
 	{
 		timestamps: true
 	}
 );
 
-const Board = mongoose.model('Boards', boardSchema, 'boards');
+const Board = mongoose.model<IBoardDocument>('Board', boardSchema, 'boards');
 
 export const seedBoards = async () => {
 	const board = new Board({
