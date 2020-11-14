@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import { IBoardDocument } from './board.d';
+import { seedColumns } from '../column/column'
 
 const boardSchema = new mongoose.Schema(
 	{
@@ -8,6 +9,9 @@ const boardSchema = new mongoose.Schema(
 			type: String,
 			unique: true,
 			required: true
+		},
+		description: {
+			type: String,
 		},
 		columns: [
 			{
@@ -24,12 +28,29 @@ const boardSchema = new mongoose.Schema(
 const Board = mongoose.model<IBoardDocument>('Board', boardSchema, 'boards');
 
 export const seedBoards = async () => {
-	const board = new Board({
-		boardName: 'board1'
-	})
+	const board = [
+		{
+			boardName: 'HCMUS Retro board',
+			description: 'With some demo tickets ...'
+		},
+		{
+			boardName: 'BKU Retro board'
+		},
+		{
+			boardName: 'UIT Retro board'
+		},
+		{
+			boardName: 'RMIT Retro board'
+		}
+	];
 
 	try {
-		await board.save();
+		board.map(async (instance, index) => {
+			const saveBoard = new Board(instance);
+			await saveBoard.save();
+
+			index === 0 && await seedColumns(saveBoard._id);
+		});
 	} catch (error) {
 		console.log(error);
 	}
