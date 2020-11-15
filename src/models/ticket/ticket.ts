@@ -1,62 +1,54 @@
 import mongoose from 'mongoose';
+
+import Board from '../board/board';
 import Column from '../column/column';
 
+import { IColumnDocument } from '../column/column.d';
 import { ITicketDocument } from './ticket.d';
+
 const ticketSchema = new mongoose.Schema(
-    {
-        ticketName: {
-            type: String,
-            unique: true,
-            required: true
-        },
-        description: {
-            type: String,
-        },
-        column: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Column'
-        }
+  {
+    ticketName: {
+      type: String,
+      unique: true,
+      required: true
     },
-    {
-        timestamps: true
+    description: {
+      type: String,
+    },
+    column: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Column'
     }
+  },
+  {
+    timestamps: true
+  }
 );
 
 const Ticket = mongoose.model<ITicketDocument>('Ticket', ticketSchema, 'tickets');
 
-export const seedTicket = async () => {
-    const wentWell = await Column.findOne({ columnName: 'wentWell' });
+export const seedTicket = async (boardId: string, columnType: number, ticketData: any) => {
+  const board = await Board.findOne({ _id: boardId }).populate('columns');
+  const desColumn = board!.columns.find((col: any) => col.columnType === columnType);
+  const column = await Column.findOne({ _id: desColumn._id })
 
-    const ticketsData = [
-        {
-            ticketName: 'Implement',
-            description: 'Implement logic',
-            column: wentWell!._id
-        },
-        {
-            ticketName: 'Debug',
-            description: 'Debugging',
-            column: wentWell!._id
-        },
-        {
-            ticketName: 'Review',
-            description: 'Reviewing',
-            column: wentWell!._id
-        }
-    ];
-
+  if (column) {
     try {
-        let ticketsArray: ITicketDocument[] = [];
-        ticketsData.map(async ticket => {
-            const newTicket = new Ticket(ticket);
-            ticketsArray.push(newTicket);
-            await newTicket.save();
-        });
-        ticketsArray.map((ticket: ITicketDocument) => wentWell!.tickets.push(ticket));
-        await wentWell!.save();
+      let ticketsArray: ITicketDocument[] = [];
+
+      ticketData.map(async (ticket: any) => {
+        const newTicket = new Ticket(ticket);
+        ticketsArray.push(newTicket);
+        await newTicket.save();
+      });
+
+      ticketsArray.map((ticket: ITicketDocument) => column.tickets.push(ticket));
+      await column.save();
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
+  }
 };
 
 export default Ticket;

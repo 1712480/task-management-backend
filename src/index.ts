@@ -30,7 +30,7 @@ const port = process.env.PORT;
 // Connect to database
 try {
 	connectDb().then(async () => {
-		// // Delete all current data.
+		// Delete all current data.
 		await Promise.all([
 			models.User.deleteMany({}),
 			models.Boards.deleteMany({}),
@@ -38,11 +38,9 @@ try {
 			models.Ticket.deleteMany({})
 		]);
 
-		// Seed data.
-		await seedUser();
+		// // Seed data.
+		// await seedUser();
 		await seedBoards();
-		await seedColumns();
-		await seedTicket();
 		app.listen(port, () => {
 			console.log(`Back-end listening on port ${port}`);
 		});
