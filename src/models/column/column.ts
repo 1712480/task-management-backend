@@ -33,36 +33,15 @@ export const seedColumns = async (boardId: string) => {
     {
       columnType: 1,
       board: board!._id,
-      tickets: [
-        {
-          ticketName: 'Do task 1',
-          description: 'Some description of the task ...',
-        },
-        {
-          ticketName: 'Do task 2',
-          description: 'Some other description ...',
-        },
-      ]
     },
     {
       columnType: 2,
       board: board!._id,
-      tickets: [
-        {
-          ticketName: 'Redo task 1',
-          description: 'Reason why the task need more effort ...',
-        },
-      ]
+
     },
     {
       columnType: 3,
       board: board!._id,
-      tickets: [
-        {
-          ticketName: 'New task 3',
-          description: 'Description of the task ...',
-        }
-      ]
     }
   ];
 
@@ -72,8 +51,8 @@ export const seedColumns = async (boardId: string) => {
       const newColumn = new Column(column);
       columnsArray.push(newColumn);
       await newColumn.save();
-      // await seedTicket(boardId, column.columnType, column.tickets);
     });
+
     columnsArray.map((column: IColumnDocument) => board!.columns.push(column));
     await board!.save();
     return {
