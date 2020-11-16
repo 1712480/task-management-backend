@@ -23,6 +23,19 @@ boardRoute.get('/all-board', async (req, res) => {
 	});
 });
 
+boardRoute.get('/', async (req, res) => {
+	const { id } = req.query;
+	const board = await Board.find({ _id: id }).populate({ path: 'columns', populate: { path: 'tickets' }})
+		.catch(error => {
+			return res.status(400).send({
+				error
+			});
+		});
+	res.status(200).send({
+		board
+	});
+});
+
 boardRoute.post('/create-board', async (req, res) => {
 	const { boardName, description } = req.body;
 	const newBoard = new Board({ boardName, description });
@@ -95,6 +108,48 @@ boardRoute.post('/update-ticket', async (req, res) => {
 			status: 400,
 			message: 'Update failed.'
 		})
+	}
+});
+
+boardRoute.post('/save-ticket', async (req, res) => {
+	const { id, name, des } = req.body;
+	const ticket = await Ticket.findOne({ _id: id });
+	if (ticket) {
+		ticket.ticketName = name;
+		ticket.description = des;
+		await ticket.save()
+			.then(response => {
+				res.status(200).send(response);
+			})
+			.catch(err => {
+				res.status(400).send(err);
+			})
+	}
+});
+
+boardRoute.post('/delete-ticket', async (req, res) => {
+	const { ticketId, columnId } = req.body;
+	const column = await Column.findOne({ _id: columnId });
+
+	if (column) {
+		await Ticket.deleteOne({ _id: ticketId })
+			.then(async response => {
+				column.tickets = column.tickets.filter((ticket: any) => ticket._id !== ticketId);
+				await column.save()
+					.then((result: IColumnDocument) => {
+						res.send(201).send(result);
+					})
+					.catch((error: any) => {
+						res.send(400).send(error);
+					});
+			})
+			.catch(error => {
+				res.status(400).send(error);
+			})
+	} else {
+		res.status(400).send({
+			error: 'Can not find column'
+		});
 	}
 });
 

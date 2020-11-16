@@ -15,6 +15,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', async (req, res) => {
 	res.status(200).send({
