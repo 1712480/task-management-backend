@@ -33,9 +33,9 @@ try {
 		// Delete all current data.
 		await Promise.all([
 			models.User.deleteMany({}),
-			// models.Boards.deleteMany({}),
-			// models.Column.deleteMany({}),
-			// models.Ticket.deleteMany({})
+			models.Boards.deleteMany({}),
+			models.Column.deleteMany({}),
+			models.Ticket.deleteMany({})
 		]);
 
 		// // Seed data.
