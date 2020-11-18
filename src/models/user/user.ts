@@ -9,11 +9,6 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 			required: true
 		},
-		email: {
-			type: String,
-			unique: true,
-			required: true
-		},
 		password: {
 			type: String,
 			required: true
@@ -28,8 +23,7 @@ const User = mongoose.model<IUserDocument>('User', userSchema, 'users');
 
 export const seedUser = async () => {
 	const user = new User({
-		userName: 'Hung Nguyen',
-		email: '1712480@student.hcmus.edu.vn',
+		userName: 'hungNguyen',
 		password: '123456'
 	});
 	await user.save();

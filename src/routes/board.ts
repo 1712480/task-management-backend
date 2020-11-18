@@ -36,6 +36,18 @@ boardRoute.get('/', async (req, res) => {
 	});
 });
 
+boardRoute.post('/delete-board', async (req, res) => {
+	const { boardId } = req.body;
+
+	await Board.deleteOne({ _id: boardId })
+		.then(response => {
+			res.status(200).send(response);
+		})
+		.catch(error => {
+			res.status(400).send(error);
+		})
+});
+
 boardRoute.post('/create-board', async (req, res) => {
 	const { boardName, description } = req.body;
 	const newBoard = new Board({ boardName, description });

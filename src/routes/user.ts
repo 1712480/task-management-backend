@@ -4,8 +4,8 @@ import User from "../models/user/user";
 const userRouter = express.Router();
 
 userRouter.post('/create-user', async (req, res) => {
-  const { userName, email, password } = req.body;
-  const user = new User({ userName, email, password });
+  const { userName, password } = req.body;
+  const user = new User({ userName, password });
   await user.save()
     .then(response => {
       res.status(201).send(response);
@@ -16,8 +16,8 @@ userRouter.post('/create-user', async (req, res) => {
 });
 
 userRouter.post('/user-login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email })
+  const { userName, password } = req.body;
+  const user = await User.findOne({ userName })
 
   if (user !== null && user.password === password) {
     res.status(200).send(user);

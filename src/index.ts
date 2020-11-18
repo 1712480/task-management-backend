@@ -32,14 +32,14 @@ try {
 	connectDb().then(async () => {
 		// Delete all current data.
 		await Promise.all([
-			// models.User.deleteMany({}),
+			models.User.deleteMany({}),
 			// models.Boards.deleteMany({}),
 			// models.Column.deleteMany({}),
 			// models.Ticket.deleteMany({})
 		]);
 
 		// // Seed data.
-		// await seedUser();
+		await seedUser();
 		// await seedBoards();
 		app.listen(port, () => {
 			console.log(`Back-end listening on port ${port}`);
