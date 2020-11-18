@@ -4,10 +4,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import models, { connectDb } from "./models";
+
 import { seedUser } from './models/user/user';
 import { seedBoards } from "./models/board/board";
-import { seedColumns } from "./models/column/column";
-import { seedTicket } from "./models/ticket/ticket";
 
 import userRoute from './routes/user';
 import boardRoute from "./routes/board";
@@ -15,6 +14,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', async (req, res) => {
 	res.status(200).send({
@@ -33,14 +33,14 @@ try {
 		// Delete all current data.
 		await Promise.all([
 			models.User.deleteMany({}),
-			models.Boards.deleteMany({}),
-			models.Column.deleteMany({}),
-			models.Ticket.deleteMany({})
+			// models.Boards.deleteMany({}),
+			// models.Column.deleteMany({}),
+			// models.Ticket.deleteMany({})
 		]);
 
 		// // Seed data.
-		// await seedUser();
-		await seedBoards();
+		await seedUser();
+		// await seedBoards();
 		app.listen(port, () => {
 			console.log(`Back-end listening on port ${port}`);
 		});

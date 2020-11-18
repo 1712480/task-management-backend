@@ -1,6 +1,6 @@
 import mongoose  from 'mongoose';
 
-import { IUserDocument, IUserModal } from './user.d';
+import { IUserDocument } from './user.d';
 
 const userSchema = new mongoose.Schema(
 	{
@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model<IUserDocument>('User', userSchema, 'users');
 
 export const seedUser = async () => {
-	const admin1 = new User({
-		userName: 'admin1',
+	const user = new User({
+		userName: 'hungNguyen',
 		password: '123456'
 	});
-	await admin1.save();
+	await user.save();
 }
 
 export default User;

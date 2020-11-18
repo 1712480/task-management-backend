@@ -38,7 +38,7 @@ export const seedTicket = async (boardId: string, columnType: number, ticketData
       let ticketsArray: ITicketDocument[] = [];
 
       ticketData.map(async (ticket: any) => {
-        const newTicket = new Ticket(ticket);
+        const newTicket = new Ticket({ ...ticket, column: column._id });
         ticketsArray.push(newTicket);
         await newTicket.save();
       });
